@@ -26,6 +26,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     Button createAccountBtn;
     ProgressBar progressBar;
     TextView loginBtnTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         boolean isValidated = validateData(email, password, confirmPassword);
 
-        if(!isValidated) {
+        if (!isValidated) {
             return;
         }
         createAccountInFirebase(email, password);
@@ -63,7 +64,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 changeInProgress(false);
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     //creating acc is done
                     Toast.makeText(CreateAccountActivity.this, "Successfully create account, Check email to verify", Toast.LENGTH_SHORT).show();
                     firebaseAuth.getCurrentUser().sendEmailVerification();
@@ -72,14 +73,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                 } else {
                     //failure
                     Toast.makeText(CreateAccountActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
     }
 
     void changeInProgress(boolean inProgress) {
-        if(inProgress) {
+        if (inProgress) {
             progressBar.setVisibility(View.VISIBLE);
             createAccountBtn.setVisibility(View.GONE);
         } else {
@@ -90,15 +90,15 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     boolean validateData(String email, String password, String confirmPassword) {
         // validate the data that are input by user
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.setError("Email is invalid");
             return false;
         }
-        if(password.length()<6) {
+        if (password.length() < 6) {
             passwordEditText.setError("Password length is invalid");
             return false;
         }
-        if(!password.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             confirmPasswordEditText.setError("Password not matched");
         }
         return true;

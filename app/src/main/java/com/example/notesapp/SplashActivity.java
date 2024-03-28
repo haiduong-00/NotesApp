@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 FirebaseUser curentUser = FirebaseAuth.getInstance().getCurrentUser();
-                if(curentUser == null) {
+                if (curentUser == null) {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 } else {
                     // dang nhap thanh cong se chuyen sang main activity

@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean isValidated = validateData(email, password);
 
-        if(!isValidated) {
+        if (!isValidated) {
             return;
         }
 
@@ -59,9 +59,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 changeInProgress(false);
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     // login is success
-                    if(firebaseAuth.getCurrentUser().isEmailVerified()) {
+                    if (firebaseAuth.getCurrentUser().isEmailVerified()) {
                         //go to main activity
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void changeInProgress(boolean inProgress) {
-        if(inProgress) {
+        if (inProgress) {
             progressBar.setVisibility(View.VISIBLE);
             loginBtn.setVisibility(View.GONE);
         } else {
@@ -88,11 +88,11 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean validateData(String email, String password) {
         // validate the data that are input by user
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.setError("Email is invalid");
             return false;
         }
-        if(password.length()<6) {
+        if (password.length() < 6) {
             passwordEditText.setError("Password length is invalid");
             return false;
         }
