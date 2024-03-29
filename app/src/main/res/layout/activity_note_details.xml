@@ -29,7 +29,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/baseline_add_24"
+            android:src="@drawable/baseline_check_24"
             app:tint="@color/white" />
     </RelativeLayout>
 
@@ -66,5 +66,16 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/delete_note_text_view_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="Delete note"
+        android:textColor="#FF0000"
+        android:textSize="18dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
