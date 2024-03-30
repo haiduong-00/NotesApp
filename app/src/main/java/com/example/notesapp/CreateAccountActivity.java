@@ -100,7 +100,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
         if (!password.equals(confirmPassword)) {
             confirmPasswordEditText.setError("Password not matched");
-            return false;
         }
         return true;
     }
