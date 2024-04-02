@@ -1,4 +1,4 @@
-package com.example.notesapp;
+package com.example.notesapp.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.notesapp.model.Note;
+import com.example.notesapp.R;
+import com.example.notesapp.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -93,7 +95,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         });
     }
 
-    void deleteNoteFromFirebase(){
+    void deleteNoteFromFirebase() {
         DocumentReference documentReference;
         documentReference = Utility.getCollectionReferenceForNotes().document(docId);
         documentReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {

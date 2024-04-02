@@ -14,11 +14,11 @@ import java.text.SimpleDateFormat;
 
 public class Utility {
 
-    static void showToast(Context context, String message) {
+    public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    static CollectionReference getCollectionReferenceForNotes() {
+    public static CollectionReference getCollectionReferenceForNotes() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             return FirebaseFirestore.getInstance().collection("notes")
@@ -27,7 +27,16 @@ public class Utility {
         return null;
     }
 
-    static String timestampToString(Timestamp timestamp) {
+    public static CollectionReference getCollectionReferenceForToDoLists() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return FirebaseFirestore.getInstance().collection("todolist")
+                    .document(currentUser.getUid()).collection("my_todolist");
+        }
+        return null;
+    }
+
+    public static String timestampToString(Timestamp timestamp) {
         @SuppressLint("SimpleDateFormat") String format = new SimpleDateFormat("MM/dd/yyyy").format(timestamp.toDate());
         return format;
     }
