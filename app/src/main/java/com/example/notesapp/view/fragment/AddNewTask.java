@@ -22,12 +22,13 @@ import androidx.annotation.Nullable;
 
 import com.example.notesapp.OnDialogCloseListener;
 import com.example.notesapp.R;
-import com.example.notesapp.Utility;
+import com.example.notesapp.Utils.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -41,9 +42,11 @@ public class AddNewTask extends BottomSheetDialogFragment {
     private TextView setDueDate;
     private EditText taskEdit;
     private Button saveBtn;
-    private FirebaseFirestore firestore;
     private Context context;
     private String dueDate = "";
+    private String task;
+    private String id = "";
+    private String dueDateUpdate = "";
 
     public static AddNewTask newInstance() {
         return new AddNewTask();
@@ -65,7 +68,24 @@ public class AddNewTask extends BottomSheetDialogFragment {
         taskEdit = view.findViewById(R.id.task_editText);
         saveBtn = view.findViewById(R.id.save_btn);
 
-        firestore = FirebaseFirestore.getInstance();
+        boolean isUpdate = false;
+
+        final Bundle bundle = getArguments();
+        if (bundle != null) {
+            isUpdate = true;
+            task = bundle.getString("task");
+            id = bundle.getString("id");
+            dueDateUpdate = bundle.getString("due");
+
+            taskEdit.setText(task);
+            setDueDate.setText(dueDateUpdate);
+
+            if (task.length() > 0) {
+                saveBtn.setEnabled(false);
+                saveBtn.setBackgroundColor(Color.GRAY);
+            }
+        }
+
 
         taskEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,40 +117,45 @@ public class AddNewTask extends BottomSheetDialogFragment {
             }
         });
 
+        boolean finalIsUpdate = isUpdate;
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String task = taskEdit.getText().toString();
 
-                if(task.isEmpty()) {
-                    Toast.makeText(context,"Empty task not Allowed !!", Toast.LENGTH_SHORT).show();
+                if (finalIsUpdate) {
+                    Utility.getCollectionReferenceForToDoLists().document(id).update("task", task, "due", dueDate);
+                    Toast.makeText(context, "Task Updated", Toast.LENGTH_SHORT).show();
                 } else {
-                    Map<String, Object> taskMap = new HashMap<>();
+                    if (task.isEmpty()) {
+                        Toast.makeText(context, "Empty task not Allowed !!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Map<String, Object> taskMap = new HashMap<>();
 
-                    taskMap.put("task", task);
-                    taskMap.put("due", dueDate);
-                    taskMap.put("status", 0);
+                        taskMap.put("task", task);
+                        taskMap.put("due", dueDate);
+                        taskMap.put("status", 0);
+                        taskMap.put("time", FieldValue.serverTimestamp()); // de sort by time
 
-                    Task<DocumentReference> documentReference;
-                    documentReference = Utility.getCollectionReferenceForToDoLists().add(taskMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if(task.isSuccessful()) {
-                                Toast.makeText(context, "Task saved", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Utility.getCollectionReferenceForToDoLists().add(taskMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(context, "Task saved", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    dismiss();
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
+                dismiss();
             }
         });
     }
@@ -163,8 +188,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Activity activity = getActivity();
-        if(activity instanceof OnDialogCloseListener) {
-            ((OnDialogCloseListener)activity).onDialogClose(dialog);
+        if (activity instanceof OnDialogCloseListener) {
+            ((OnDialogCloseListener) activity).onDialogClose(dialog);
         }
     }
 }
