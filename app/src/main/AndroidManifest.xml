@@ -13,22 +13,25 @@
         android:theme="@style/Theme.NotesApp"
         tools:targetApi="31">
         <activity
-            android:name=".NoteDetailsActivity"
+            android:name=".view.activity.ToDoActivity"
             android:exported="false" />
         <activity
-            android:name=".NoteDetailsAcivity"
+            android:name=".view.activity.SplashToDoListActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.activity.NoteDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountActivity"
+            android:name=".view.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.CreateAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
