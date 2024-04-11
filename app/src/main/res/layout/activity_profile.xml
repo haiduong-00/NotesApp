@@ -14,13 +14,22 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="@color/teal_200">
+            <ImageButton
+                android:id="@+id/btnmenu"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_dehaze_24"
+                app:tint="@color/white"
+                />
 
             <ImageView
                 android:id="@+id/userImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/no_image_user" />
+                android:background="@drawable/user_image_new" />
 
         </RelativeLayout>
 
@@ -33,10 +42,10 @@
 
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/ic_profile"
-                android:background="@drawable/no_image_user"/>
+                android:background="@drawable/user_image_new"/>
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,12 +63,12 @@
                 android:id="@+id/dividerName"/>
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/ic_email"
                 android:layout_below="@+id/dividerName"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/email"/>
+                android:background="@drawable/emailnew"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +78,7 @@
                 android:layout_marginStart="50dp"
                 android:layout_below="@id/dividerName"
                 android:layout_marginTop="20dp"
+
                 android:textSize="18sp"/>
             <View
                 android:layout_width="match_parent"
@@ -80,8 +90,8 @@
 
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/ic_pass"
                 android:layout_below="@+id/dividerEmail"
                 android:layout_marginTop="20dp"
@@ -115,8 +125,8 @@
                 android:layout_below="@id/dividerEmail"/>
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/ic_date"
                 android:layout_below="@+id/dividerPass"
                 android:layout_marginTop="20dp"
@@ -140,8 +150,8 @@
                 android:id="@+id/dividerDate"/>
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:id="@+id/ic_sex"
                 android:layout_below="@+id/dividerDate"
                 android:layout_marginTop="20dp"
@@ -165,8 +175,8 @@
                 android:id="@+id/dividerSex"/>
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:id="@+id/ic_phone"
                 android:layout_below="@+id/dividerSex"
                 android:layout_marginTop="20dp"
