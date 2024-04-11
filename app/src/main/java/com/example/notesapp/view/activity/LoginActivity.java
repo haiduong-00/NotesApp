@@ -85,34 +85,28 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
-            // When request code is equal to 100 initialize task
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
-            // check condition
             if (signInAccountTask.isSuccessful()) {
-                // When google sign in successful initialize string
-                String s = "Google sign in successful";
-                // Display Toast
 
-                // Initialize sign in account
                 try {
-                    // Initialize sign in account
+
                     GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
-                    // Check condition
+
                     if (googleSignInAccount != null) {
-                        // When sign in account is not equal to null initialize auth credential
+
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                        // Check credential
+
                         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                // Check condition
+
                                 if (task.isSuccessful()) {
-                                    // When task is successful redirect to profile activity display Toast
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    Toast.makeText(LoginActivity.this, "Login with google is successfully!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    // When task is unsuccessful display Toast
 
+                                    Toast.makeText(LoginActivity.this, "Failed to sign in: " + task.getException(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -128,9 +122,7 @@ public class LoginActivity extends AppCompatActivity {
     void loginUser() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-
         boolean isValidated = validateData(email, password);
-
         if (!isValidated) {
             return;
         }

@@ -72,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 if (item.getTitle() == "Profile") {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-
+                    startActivity(new Intent(MainActivity.this, SplashProfileActivity.class));
                     return true;
                 }
                 return false;

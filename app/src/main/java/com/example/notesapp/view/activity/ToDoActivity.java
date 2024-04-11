@@ -105,6 +105,7 @@ public class ToDoActivity extends AppCompatActivity {
         popupMenu.getMenu().add("Note List");
         popupMenu.getMenu().add("Schedule");
         popupMenu.getMenu().add("ToDo List");
+        popupMenu.getMenu().add("Profile");
         popupMenu.getMenu().add("Logout");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -123,6 +124,11 @@ public class ToDoActivity extends AppCompatActivity {
                 }
                 if (item.getTitle() == "ToDo List") {
                     startActivity(new Intent(ToDoActivity.this, SplashToDoListActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "Profile") {
+                    startActivity(new Intent(ToDoActivity.this, SplashProfileActivity.class));
                     finish();
                     return true;
                 }
