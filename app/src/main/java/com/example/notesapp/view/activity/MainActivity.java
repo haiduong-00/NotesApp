@@ -1,13 +1,21 @@
 package com.example.notesapp.view.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +27,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.Query;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         menuBtn.setOnClickListener((v) -> showMenu());
         sortMenuBtn.setOnClickListener((v) -> showSortMenu());
         setupRecyclerView();
+        notificationApp();
     }
 
     void showMenu() {
@@ -157,5 +168,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         noteAdapter.notifyDataSetChanged();
+    }
+    public void notificationApp(){
+        Context context = getApplicationContext();
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_android_black_24dp))
+                .setContentTitle("Let save note !")
+                .setContentText("Please save some notes!")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("Please save some notes!! Schedule your day!"))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        Notification notification = builder.build();
+
+        // Hiển thị thông báo
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Let save note ";
+            String description = "Channel for today notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("channel_id", name, importance);
+            channel.setDescription(description);
+
+            // Đăng ký channel với hệ thống
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
