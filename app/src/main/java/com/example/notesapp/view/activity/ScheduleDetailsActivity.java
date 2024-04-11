@@ -112,7 +112,7 @@ public class ScheduleDetailsActivity extends AppCompatActivity {
 
         if (bytes != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            //binding.schdeuleImagePaint.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            binding.schdeuleImagePaint.setScaleType(ImageView.ScaleType.FIT_CENTER);
             binding.schdeuleImagePaint.setImageBitmap(bitmap);
             binding.cardView.setVisibility(View.VISIBLE);
             binding.schdeuleImagePaint.setVisibility(View.VISIBLE);
@@ -289,6 +289,8 @@ public class ScheduleDetailsActivity extends AppCompatActivity {
                 binding.schdeuleImagePaint.setVisibility(View.GONE);
                 binding.btnScheduleDeleteImagePaint.setVisibility(View.GONE);
                 binding.cardView.setVisibility(View.GONE);
+                ImageView imageView = findViewById(R.id.img_schedule_from_draw);
+                imageView.setVisibility(View.GONE);
                 documentReference.update("imageUrl", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -305,7 +307,9 @@ public class ScheduleDetailsActivity extends AppCompatActivity {
     }
 
     void deleteScheduleFromFirebase() {
-        deleteImagePaintFromFirebase();
+        if (binding.schdeuleImagePaint.getVisibility() == View.VISIBLE) {
+            deleteImagePaintFromFirebase();
+        }
         DocumentReference documentReference;
         documentReference = Utility.getCollectionReferenceForSchedules().document(docId);
         documentReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {

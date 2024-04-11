@@ -89,7 +89,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/img_schedule_from_draw" />
+            android:id="@+id/img_schedule_from_draw"
+            android:visibility="visible"/>
 
     </androidx.cardview.widget.CardView>
 

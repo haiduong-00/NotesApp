@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,10 +51,42 @@ public class MainScheduleActivity extends AppCompatActivity {
         binding = ActivityMainScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String searchTitle = s.toString();
+                searchFireStore(searchTitle);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         binding.addNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainScheduleActivity.this, ScheduleDetailsActivity.class));
+            }
+        });
+
+        binding.menuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMenu();
+            }
+        });
+
+        binding.sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOptionMenu();
             }
         });
 
@@ -65,6 +99,15 @@ public class MainScheduleActivity extends AppCompatActivity {
                 .setQuery(query, Schedule.class).build();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         scheduleAdapter = new ScheduleAdapter(options, this);
+        binding.recyclerView.setAdapter(scheduleAdapter);
+    }
+
+    void searchFireStore(String text) {
+        Query query = Utility.getCollectionReferenceForSchedules().orderBy("title", Query.Direction.DESCENDING).startAt(text + "~");
+        FirestoreRecyclerOptions<Schedule> options = new FirestoreRecyclerOptions.Builder<Schedule>()
+                .setQuery(query, Schedule.class).build();
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        scheduleAdapter.updateOptions(options);
         binding.recyclerView.setAdapter(scheduleAdapter);
     }
 
@@ -102,8 +145,56 @@ public class MainScheduleActivity extends AppCompatActivity {
                     return true;
                 }
                 if (item.getTitle() == "Schedules") {
-                    startActivity(new Intent(MainScheduleActivity.this, MainScheduleActivity.class));
+                    startActivity(new Intent(MainScheduleActivity.this, SplashScheduleActivity.class));
                     finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    void showOptionMenu() {
+        //TODO Display menu
+        PopupMenu popupMenu = new PopupMenu(MainScheduleActivity.this, binding.sortBtn);
+        popupMenu.getMenu().add("Sort title ascending");
+        popupMenu.getMenu().add("Sort title descending");
+        popupMenu.getMenu().add("Sort date ascending");
+        popupMenu.getMenu().add("Sort date descending");
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getTitle() == "Sort title ascending") {
+                    Query query = Utility.getCollectionReferenceForSchedules().orderBy("title", Query.Direction.ASCENDING);
+                    FirestoreRecyclerOptions<Schedule> options = new FirestoreRecyclerOptions.Builder<Schedule>()
+                            .setQuery(query, Schedule.class).build();
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(MainScheduleActivity.this));
+                    scheduleAdapter.updateOptions(options);
+                    return true;
+                }
+                if (item.getTitle() == "Sort title descending") {
+                    Query query = Utility.getCollectionReferenceForSchedules().orderBy("title", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<Schedule> options = new FirestoreRecyclerOptions.Builder<Schedule>()
+                            .setQuery(query, Schedule.class).build();
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(MainScheduleActivity.this));
+                    scheduleAdapter.updateOptions(options);
+                    return true;
+                }
+                if (item.getTitle() == "Sort date ascending") {
+                    Query query = Utility.getCollectionReferenceForSchedules().orderBy("createTime", Query.Direction.ASCENDING);
+                    FirestoreRecyclerOptions<Schedule> options = new FirestoreRecyclerOptions.Builder<Schedule>()
+                            .setQuery(query, Schedule.class).build();
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(MainScheduleActivity.this));
+                    scheduleAdapter.updateOptions(options);
+                    return true;
+                }
+                if (item.getTitle() == "Sort date descending") {
+                    Query query = Utility.getCollectionReferenceForSchedules().orderBy("createTime", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<Schedule> options = new FirestoreRecyclerOptions.Builder<Schedule>()
+                            .setQuery(query, Schedule.class).build();
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(MainScheduleActivity.this));
+                    scheduleAdapter.updateOptions(options);
                     return true;
                 }
                 return false;

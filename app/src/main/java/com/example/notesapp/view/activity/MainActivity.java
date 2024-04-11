@@ -3,7 +3,11 @@ package com.example.notesapp.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
@@ -15,6 +19,7 @@ import com.example.notesapp.model.Note;
 import com.example.notesapp.adapter.NoteAdapter;
 import com.example.notesapp.R;
 import com.example.notesapp.Utils.Utility;
+import com.example.notesapp.model.Schedule;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageButton menuBtn, sortMenuBtn;
     NoteAdapter noteAdapter;
+    EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +42,38 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyler_view);
         menuBtn = findViewById(R.id.menu_btn);
         sortMenuBtn = findViewById(R.id.sort_btn);
+        search = findViewById(R.id.search_field);
 
         addNoteBtn.setOnClickListener((v) -> startActivity(new Intent(MainActivity.this, NoteDetailsActivity.class)));
         menuBtn.setOnClickListener((v) -> showMenu());
         sortMenuBtn.setOnClickListener((v) -> showSortMenu());
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String searchText = s.toString();
+                searchFireStore(searchText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         setupRecyclerView();
+    }
+
+    void searchFireStore(String text) {
+        Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.DESCENDING). startAt(text + "~");
+        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                .setQuery(query, Note.class).build();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        noteAdapter.updateOptions(options);
+        recyclerView.setAdapter(noteAdapter);
     }
 
     void showMenu() {
@@ -77,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 if (item.getTitle() == "Schedule") {
-                    startActivity(new Intent(MainActivity.this, MainScheduleActivity.class));
+                    startActivity(new Intent(MainActivity.this, SplashScheduleActivity.class));
                     finish();
                     return true;
                 }

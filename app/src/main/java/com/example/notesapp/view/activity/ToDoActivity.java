@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -19,9 +22,11 @@ import android.widget.Toast;
 import com.example.notesapp.TouchHelper;
 import com.example.notesapp.Utils.Utility;
 import com.example.notesapp.adapter.ToDoAdapter;
+import com.example.notesapp.model.Schedule;
 import com.example.notesapp.model.ToDo;
 import com.example.notesapp.view.fragment.AddNewTask;
 import com.example.notesapp.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -53,6 +58,7 @@ public class ToDoActivity extends AppCompatActivity {
         menuBtn.setOnClickListener((v) -> showMenu());
         sortmenuBtn.setOnClickListener((v) -> showSortMenu());
 
+
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +77,7 @@ public class ToDoActivity extends AppCompatActivity {
 //
 //        recyclerView.setAdapter(toDoAdapter);
     }
+
 
     private void showData() {
         Utility.getCollectionReferenceForToDoLists().orderBy("time", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -104,6 +111,7 @@ public class ToDoActivity extends AppCompatActivity {
         PopupMenu popupMenu = new PopupMenu(ToDoActivity.this, menuBtn);
         popupMenu.getMenu().add("Note List");
         popupMenu.getMenu().add("Schedule");
+        popupMenu.getMenu().add("Profile");
         popupMenu.getMenu().add("ToDo List");
         popupMenu.getMenu().add("Logout");
         popupMenu.show();
@@ -123,6 +131,16 @@ public class ToDoActivity extends AppCompatActivity {
                 }
                 if (item.getTitle() == "ToDo List") {
                     startActivity(new Intent(ToDoActivity.this, SplashToDoListActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "Profile") {
+                    startActivity(new Intent(ToDoActivity.this, ProfileActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "Schedule") {
+                    startActivity(new Intent(ToDoActivity.this, SplashScheduleActivity.class));
                     finish();
                     return true;
                 }
