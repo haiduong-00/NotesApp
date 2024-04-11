@@ -1,9 +1,11 @@
 package com.example.notesapp.view.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -11,34 +13,116 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.notesapp.R;
 import com.example.notesapp.Utils.Utility;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
+    GoogleSignInClient googleSignInClient;
+    FirebaseAuth firebaseAuth;
     EditText emailEditText, passwordEditText;
     Button loginBtn;
     ProgressBar progressBar;
-    TextView createAccountBtnTextView;
+    TextView createAccountBtnTextView, textViewForgotPass, txtSignWithGoogle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginBtn = findViewById(R.id.login_btn);
         progressBar = findViewById(R.id.progress_bar);
         createAccountBtnTextView = findViewById(R.id.create_account_text_btn);
+        textViewForgotPass = findViewById(R.id.txtforgotPassword);
+        txtSignWithGoogle = findViewById(R.id.txtBygoogle);
 
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("321422273333-aotn9ru5th2davlk3nebflh1342toosn.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
+
+        txtSignWithGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                startActivityForResult(intent, 100);
+            }
+        });
         loginBtn.setOnClickListener((v) -> loginUser());
+        textViewForgotPass.setOnClickListener((v) -> startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
         createAccountBtnTextView.setOnClickListener((v) -> startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class)));
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            // When request code is equal to 100 initialize task
+            Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            // check condition
+            if (signInAccountTask.isSuccessful()) {
+                // When google sign in successful initialize string
+                String s = "Google sign in successful";
+                // Display Toast
+
+                // Initialize sign in account
+                try {
+                    // Initialize sign in account
+                    GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
+                    // Check condition
+                    if (googleSignInAccount != null) {
+                        // When sign in account is not equal to null initialize auth credential
+                        AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+                        // Check credential
+                        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                // Check condition
+                                if (task.isSuccessful()) {
+                                    // When task is successful redirect to profile activity display Toast
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                                } else {
+                                    // When task is unsuccessful display Toast
+
+                                }
+                            }
+                        });
+                    }
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     void loginUser() {
@@ -50,12 +134,11 @@ public class LoginActivity extends AppCompatActivity {
         if (!isValidated) {
             return;
         }
-
         loginAccountInFirebase(email, password);
     }
 
     void loginAccountInFirebase(String email, String password) {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
         changeInProgress(true);
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

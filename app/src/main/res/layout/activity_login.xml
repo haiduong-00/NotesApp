@@ -92,6 +92,7 @@
         android:layout_below="@id/form_layout"
         android:layout_marginTop="50dp"
         android:gravity="center"
+        android:id="@+id/creationAcc"
         android:orientation="horizontal">
 
         <TextView
@@ -106,5 +107,34 @@
             android:text="Create Account"
             android:textStyle="bold" />
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/creationAcc"
+        android:id="@+id/forgotpass"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot password"
+            android:textStyle="bold"
+            android:id="@+id/txtforgotPassword"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/forgotpass"
+        android:id="@+id/bygoogle"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign in by google"
+            android:textStyle="bold"
+            android:id="@+id/txtBygoogle"
+            />
+    </LinearLayout>
 </RelativeLayout>
