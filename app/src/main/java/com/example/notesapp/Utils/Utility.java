@@ -36,6 +36,14 @@ public class Utility {
         return null;
     }
 
+    public static CollectionReference getCollectionReferenceForProfileUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            return FirebaseFirestore.getInstance().collection("ProfileUser");
+        }
+        return null;
+    }
+
     public static String timestampToString(Timestamp timestamp) {
         @SuppressLint("SimpleDateFormat") String format = new SimpleDateFormat("MM/dd/yyyy").format(timestamp.toDate());
         return format;
