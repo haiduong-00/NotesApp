@@ -10,11 +10,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView textViewemail;
     ImageView imageUser;
     Button btnProfileSave, btnChangePwd;
+    ImageButton btnMenu;
     DatePickerDialog pickerDialog;
     FirebaseUser firebaseUser;
     FirebaseAuth firebaseAuth;
@@ -58,12 +62,14 @@ public class ProfileActivity extends AppCompatActivity {
         imageUser = findViewById(R.id.userImage);
         btnProfileSave = findViewById(R.id.btnProfileSave);
         btnChangePwd = findViewById(R.id.btnChangePwd);
+        btnMenu = findViewById(R.id.btnmenu);
 
         editTextname.setEnabled(!a);
         editTextphone.setEnabled(!a);
         editTextsex.setEnabled(!a);
-
+        editTextDate.setEnabled(!a);
         loadDataProfile();
+        btnMenu.setOnClickListener((v) -> showMenu());
 
         btnProfileSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +122,45 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void showMenu() {
+
+        //TODO Display menu
+        PopupMenu popupMenu = new PopupMenu(ProfileActivity.this, btnMenu);
+        popupMenu.getMenu().add("Note List");
+        popupMenu.getMenu().add("Schedule");
+        popupMenu.getMenu().add("ToDo List");
+        popupMenu.getMenu().add("Profile");
+        popupMenu.getMenu().add("Logout");
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getTitle() == "Logout") {
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "Note List") {
+                    startActivity(new Intent(ProfileActivity.this, SplashActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "ToDo List") {
+                    startActivity(new Intent(ProfileActivity.this, SplashToDoListActivity.class));
+                    finish();
+                    return true;
+                }
+                if (item.getTitle() == "Profile") {
+                    startActivity(new Intent(ProfileActivity.this, SplashProfileActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
     void saveDataProfile() {
         String nameText = editTextname.getText().toString();
         String dateText = editTextDate.getText().toString();
@@ -154,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     void saveProfileUserToFireBase(ProfileUser user) {
         DocumentReference documentReference;
-        documentReference = Utility.getCollectionReferenceForProfileUser().document("User"+firebaseUser.getUid());
+        documentReference = Utility.getCollectionReferenceForProfileUser().document("User" + firebaseUser.getUid());
         documentReference.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -172,10 +217,12 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         Uri uri = firebaseUser.getPhotoUrl();
+
         Picasso.get().load(uri).into(imageUser);
+
         textViewemail.setText(firebaseUser.getEmail());
         DocumentReference documentReference;
-        documentReference = Utility.getCollectionReferenceForProfileUser().document("User"+firebaseUser.getUid());
+        documentReference = Utility.getCollectionReferenceForProfileUser().document("User" + firebaseUser.getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {

@@ -113,6 +113,7 @@ public class ToDoActivity extends AppCompatActivity {
         popupMenu.getMenu().add("Schedule");
         popupMenu.getMenu().add("Profile");
         popupMenu.getMenu().add("ToDo List");
+        popupMenu.getMenu().add("Profile");
         popupMenu.getMenu().add("Logout");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -135,12 +136,16 @@ public class ToDoActivity extends AppCompatActivity {
                     return true;
                 }
                 if (item.getTitle() == "Profile") {
+<<<<<<< HEAD
                     startActivity(new Intent(ToDoActivity.this, ProfileActivity.class));
                     finish();
                     return true;
                 }
                 if (item.getTitle() == "Schedule") {
                     startActivity(new Intent(ToDoActivity.this, SplashScheduleActivity.class));
+=======
+                    startActivity(new Intent(ToDoActivity.this, SplashProfileActivity.class));
+>>>>>>> c13bac5be5ae78fbd9d6d79fb0dbcca4170b3037
                     finish();
                     return true;
                 }

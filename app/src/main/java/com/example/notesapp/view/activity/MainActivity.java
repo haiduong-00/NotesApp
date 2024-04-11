@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 if (item.getTitle() == "Profile") {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-
+                    startActivity(new Intent(MainActivity.this, SplashProfileActivity.class));
                     return true;
                 }
                 if (item.getTitle() == "Schedule") {
@@ -131,48 +130,45 @@ public class MainActivity extends AppCompatActivity {
     void showSortMenu() {
         //TODO Display menu
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, sortMenuBtn);
-        popupMenu.getMenu().add("Sort A to Z");
-        popupMenu.getMenu().add("Sort Z to A");
+        popupMenu.getMenu().add("Sort title ascending");
+        popupMenu.getMenu().add("Sort title descending");
         popupMenu.getMenu().add("Sort date ascending");
         popupMenu.getMenu().add("Sort date descending");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getTitle() == "Sort A to Z") {
-//                    Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.DESCENDING);
-//                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-//                            .setQuery(query, Note.class).build();
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-//                    noteAdapter = new NoteAdapter(options, MainActivity.this);
-//                    recyclerView.setAdapter(noteAdapter);
+                if (item.getTitle() == "Sort title ascending") {
+                    Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                            .setQuery(query, Note.class).build();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    noteAdapter.updateOptions(options);
+                    return true;
                 }
-                if (item.getTitle() == "Sort Z to A") {
-//                    Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.DESCENDING);
-//                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-//                            .setQuery(query, Note.class).build();
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-//                    noteAdapter = new NoteAdapter(options, MainActivity.this);
-//                    recyclerView.setAdapter(noteAdapter);
-//                    return true;
+                if (item.getTitle() == "Sort title descending") {
+                    Query query = Utility.getCollectionReferenceForNotes().orderBy("title", Query.Direction.ASCENDING);
+                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                            .setQuery(query, Note.class).build();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    noteAdapter.updateOptions(options);
+                    return true;
                 }
                 if (item.getTitle() == "Sort date ascending") {
-//                    Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.ASCENDING);
-//                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-//                            .setQuery(query, Note.class).build();
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-//                    noteAdapter = new NoteAdapter(options, MainActivity.this);
-//                    recyclerView.setAdapter(noteAdapter);
-//                    return true;
+                    Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.ASCENDING);
+                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                            .setQuery(query, Note.class).build();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    noteAdapter.updateOptions(options);
+                    return true;
                 }
                 if (item.getTitle() == "Sort date descending") {
-//                    Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.DESCENDING);
-//                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-//                            .setQuery(query, Note.class).build();
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-//                    noteAdapter = new NoteAdapter(options, MainActivity.this);
-//                    recyclerView.setAdapter(noteAdapter);
-//                    return true;
+                    Query query = Utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                            .setQuery(query, Note.class).build();
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    noteAdapter.updateOptions(options);
+                    return true;
                 }
                 return false;
             }
