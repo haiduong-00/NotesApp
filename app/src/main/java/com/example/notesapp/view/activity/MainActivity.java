@@ -75,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, SplashProfileActivity.class));
                     return true;
                 }
+                if (item.getTitle() == "Schedule") {
+                    startActivity(new Intent(MainActivity.this, MainScheduleActivity.class));
+                    finish();
+                    return true;
+                }
                 return false;
             }
         });
