@@ -51,7 +51,7 @@ public class ProfileImageUser extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference("ProfileImageUser");
         Uri uri = firebaseUser.getPhotoUrl();
 
-        Picasso.with(ProfileImageUser.this).load(uri).into(imageViewUploadPic);
+        Picasso.get().load(uri).into(imageViewUploadPic);
         btnProfileChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

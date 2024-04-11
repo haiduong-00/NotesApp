@@ -9,4 +9,9 @@
     <color name="dark_blue">#192A56</color>
     <color name="gray">#5B5C5E</color>
     <color name="light_gray">#9B9797</color>
+
+    <color name="colorPrimary">#020505</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="gris_light">#e1dfe1</color>
 </resources>

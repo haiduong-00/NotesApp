@@ -76,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
                     return true;
                 }
+                if (item.getTitle() == "Schedule") {
+                    startActivity(new Intent(MainActivity.this, MainScheduleActivity.class));
+                    finish();
+                    return true;
+                }
                 return false;
             }
         });

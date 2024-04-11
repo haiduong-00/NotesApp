@@ -172,7 +172,7 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         Uri uri = firebaseUser.getPhotoUrl();
-        Picasso.with(ProfileActivity.this).load(uri).into(imageUser);
+        Picasso.get().load(uri).into(imageUser);
         textViewemail.setText(firebaseUser.getEmail());
         DocumentReference documentReference;
         documentReference = Utility.getCollectionReferenceForProfileUser().document("User"+firebaseUser.getUid());
