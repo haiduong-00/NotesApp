@@ -89,6 +89,7 @@
                 android:id="@+id/schdeule_image_paint"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center_horizontal"/>
 
         </androidx.cardview.widget.CardView>

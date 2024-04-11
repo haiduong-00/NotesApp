@@ -112,7 +112,7 @@ public class ScheduleDetailsActivity extends AppCompatActivity {
 
         if (bytes != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            binding.schdeuleImagePaint.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            //binding.schdeuleImagePaint.setScaleType(ImageView.ScaleType.FIT_CENTER);
             binding.schdeuleImagePaint.setImageBitmap(bitmap);
             binding.cardView.setVisibility(View.VISIBLE);
             binding.schdeuleImagePaint.setVisibility(View.VISIBLE);
