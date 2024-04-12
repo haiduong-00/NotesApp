@@ -33,6 +33,15 @@
             android:src="@drawable/baseline_dehaze_24"
             app:tint="@color/white" />
 
+        <EditText
+            android:id="@+id/search_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/page_title"
+            android:layout_marginLeft="15dp"
+            android:drawableEnd="@drawable/baseline_search_24"
+            android:textColor="@color/white"/>
+
         <ImageButton
             android:id="@+id/sort_btn"
             android:layout_width="36dp"

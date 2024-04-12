@@ -44,6 +44,9 @@
             android:name=".view.activity.SplashToDoListActivity"
             android:exported="false" />
         <activity
+            android:name=".view.activity.SplashScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.NoteDetailsActivity"
             android:exported="false" />
         <activity
