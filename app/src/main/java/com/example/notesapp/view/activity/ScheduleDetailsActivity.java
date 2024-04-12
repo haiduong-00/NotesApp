@@ -283,14 +283,14 @@ public class ScheduleDetailsActivity extends AppCompatActivity {
         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(image);
         DocumentReference documentReference;
         documentReference = Utility.getCollectionReferenceForSchedules().document(docId);
+//        ImageView imageView = findViewById(R.id.img_schedule_from_draw);
+//        imageView.setVisibility(View.GONE);
         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 binding.schdeuleImagePaint.setVisibility(View.GONE);
                 binding.btnScheduleDeleteImagePaint.setVisibility(View.GONE);
                 binding.cardView.setVisibility(View.GONE);
-                ImageView imageView = findViewById(R.id.img_schedule_from_draw);
-                imageView.setVisibility(View.GONE);
                 documentReference.update("imageUrl", "").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

@@ -1,7 +1,14 @@
 package com.example.notesapp.view.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         addNoteBtn.setOnClickListener((v) -> startActivity(new Intent(MainActivity.this, NoteDetailsActivity.class)));
         menuBtn.setOnClickListener((v) -> showMenu());
         sortMenuBtn.setOnClickListener((v) -> showSortMenu());
+        notificationApp();
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,4 +202,25 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
         noteAdapter.notifyDataSetChanged();
     }
+    public void notificationApp(){
+        Context context = getApplicationContext();
+
+        Intent intent = new Intent(context, NoteDetailsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
+                .setContentTitle("Let save note !")
+                .setContentText("Please save some notes!")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("Please save some notes!! Schedule your day!"))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        Notification notification = builder.build();
+
+        // Hiển thị thông báo
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+    }
+
 }
